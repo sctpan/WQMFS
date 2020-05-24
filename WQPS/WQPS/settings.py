@@ -79,11 +79,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'water',
-        'USER': 数据库用户名,
-        'PASSWORD': 数据库密码,
-        #'HOST': 'cdb-9tkqohpo.bj.tencentcdb.com',
-        #'PORT': 10099
-        'HOST': 'localhost',
+        'USER': username,
+        'PASSWORD': password,
+        'HOST': host,
         'PORT': 3306
 
     }

@@ -2,33 +2,33 @@
   <div class="content">
     <div class="time_picker">
       <Row class="queryline">
-        <Col span="2" offset="1" style="text-align: center">监测站</Col>
+        <Col span="2" offset="1" style="text-align: center">Station</Col>
         <Col span="2" style="text-align: left">
           <Select v-model="station" >
-            <Option value="-1">全部</Option>
+            <Option value="-1">All</Option>
             <Option v-for="item in stationList" :value="item" :key="item">{{ item }}</Option>
           </Select>
         </Col>
-        <Col span="2" style="text-align: center;margin-left: 15px"><span>起始日期</span></Col>
+        <Col span="2" style="text-align: center;margin-left: 15px"><span>Start</span></Col>
         <Col span="4" style="text-align: left">
           <DatePicker v-if="date_loaded_flag" type="date"  @on-change="changeStartDate"
                       :start-date="startDate" :placeholder="startDateStr" ></DatePicker>
         </Col>
-        <Col span="2" style="text-align: center;margin-left: 15px"><span>结束日期</span></Col>
+        <Col span="2" style="text-align: center;margin-left: 15px"><span>End</span></Col>
         <Col span="4" style="text-align: left">
           <DatePicker v-if="date_loaded_flag" type="date"  @on-change="changeEndDate"
                       :start-date="endDate" :placeholder="endDateStr" ></DatePicker>
         </Col>
         <Col span="3" offset="1">
-          <Button type="success" shape="circle" icon="ios-search" long @click="getQueriedWaterQualities(1)">查询</Button>
+          <Button type="success" shape="circle" icon="ios-search" long @click="getQueriedWaterQualities(1)">Search</Button>
         </Col>
       </Row>
     </div>
     <div class="data_table">
       <Table class="table" border  :loading="loading_flag" :columns="columns" :data="showWaterQualities" @on-sort-change="sortBydate">
         <template slot-scope="{ row, index }" slot="action">
-              <Button type="info" size="default" style="margin-right: 10px" @click="show(index)">编辑</Button>
-              <Button type="error" size="default" @click="remove(index)">删除</Button>
+              <Button type="info" size="default" style="margin-right: 10px" @click="show(index)">Edit</Button>
+              <Button type="error" size="default" @click="remove(index)">Delete</Button>
         </template>
       </Table>
     </div>
@@ -37,10 +37,10 @@
         <Page :current="currentPage" :total="waterQualities.length" show-elevator @on-change="changePage"/>
       </template>
     </div>
-    <Modal v-model="modal_flag" title="水质数据编辑" cancel-text="取消" ok-text="提交" @on-ok="updateWaterQuality" >
+    <Modal v-model="modal_flag" title="Edit Water Quality Data" cancel-text="Cancel" ok-text="Submit" @on-ok="updateWaterQuality" >
           <Row class="editLine_time">
             <Col span="4" offset="7" style="text-align: center">
-              <span>监测日期</span>
+              <span>Date</span>
             </Col>
             <Col span="6">
               <span>{{chosenWaterQuality.date}}</span>
@@ -48,13 +48,13 @@
           </Row>
           <Row class="editLine">
             <Col span="4" offset="1" style="text-align: center">
-              <span>酸碱度</span>
+              <span>PH</span>
             </Col>
             <Col span="6">
                 <Input v-model="chosenWaterQuality.ph" :placeholder="chosenWaterQuality.ph.toString()"></Input>
             </Col>
             <Col span="4" offset="1" style="text-align: center">
-              <span>溶解氧</span>
+              <span>DO</span>
             </Col>
             <Col span="6" >
               <Input v-model="chosenWaterQuality.do" :placeholder="chosenWaterQuality.do.toString()"></Input>
@@ -62,13 +62,13 @@
           </Row>
           <Row class="editLine">
             <Col span="4" offset="1" style="text-align: center">
-              <span>氨氮</span>
+              <span>NH<sub>3</sub>N</span>
             </Col>
             <Col span="6">
               <Input v-model="chosenWaterQuality.nh3N" :placeholder="chosenWaterQuality.nh3N.toString()"></Input>
             </Col>
             <Col span="4" offset="1" style="text-align: center">
-              <span>监测站</span>
+              <span>Station</span>
             </Col>
             <Col span="6">
                 <Select v-model="chosenWaterQuality.station">
@@ -136,13 +136,13 @@
             modal_flag: false,
             columns: [
               {
-                title: '酸碱度（PH）',
+                title: 'PH',
                 key: 'ph',
                 align: 'center',
                 // width: 160
               },
               {
-                title: '溶解氧（DO mg/L）',
+                title: 'DO mg/L',
                 key: 'do',
                 align: 'center',
                 // width: 160
@@ -151,10 +151,9 @@
                 key: 'nh3N',
                 renderHeader:(h,params)=>{
                   return h('div',[
-                    h('span', '氨氮（'),
                     h('span', 'NH'),
                     h('sub','3'),
-                    h('span','N mg/L）')
+                    h('span','N mg/L')
                   ]);
                 },
                 align: 'center',
@@ -162,20 +161,20 @@
               },
 
               {
-                title: '监测日期',
+                title: 'Date',
                 key: 'date',
                 // width: 180,
                 align: 'center',
                 sortable: 'custom'
               },
               {
-                title: '监测站编号',
+                title: 'Station',
                 key: 'station',
                 width: 100,
                 align: 'center',
               },
               {
-                title: '操作',
+                title: 'Operation',
                 slot: 'action',
                 align: 'center',
                  width: 200
@@ -262,12 +261,12 @@
             })
               .then(function (response) {
                 if(response.data.status === "success") {
-                  _this.$Message.success('修改成功');
+                  _this.$Message.success('Edit succeed!');
                   _this.getQueriedWaterQualities();
                 } else if(response.data.status === "deny"){
-                  _this.$Message.error('权限不足，请联系管理员');
+                  _this.$Message.error('Permission denied, please contact the administrator!');
                 } else {
-                  _this.$Message.error('修改失败');
+                  _this.$Message.error('Edit failed!');
                 }
               });
           },
@@ -317,12 +316,12 @@
             this.axios.post('/waterquality/delete/' + this.chosenWaterQuality.id.toString())
               .then(function (response) {
                 if(response.data.status === "success") {
-                  _this.$Message.success('删除成功');
+                  _this.$Message.success('Delete succeed!');
                   _this.getQueriedWaterQualities();
                 } else if(response.data.status === "deny"){
-                  _this.$Message.error('权限不足，请联系管理员');
+                  _this.$Message.error('Permission denied, please contact the administrator!');
                 } else {
-                  _this.$Message.error('删除失败');
+                  _this.$Message.error('Delete failed!');
 
                 }
               });
@@ -357,6 +356,7 @@
     line-height: 32px;
     margin-bottom: 10px;
   }
+
 
 
 </style>

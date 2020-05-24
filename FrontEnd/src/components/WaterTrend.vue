@@ -2,35 +2,35 @@
   <div class="content">
     <div class="query">
       <Row class="queryline">
-        <Col span="2" offset="2" style="text-align: right;margin-right: 15px">监测站</Col>
+        <Col span="2" offset="2" style="text-align: right;margin-right: 15px">Station</Col>
         <Col span="2" style="text-align: left">
           <Select v-model="station" style="width:100px" placeholder="0">
             <Option v-for="item in stationList" :value="item" :key="item">{{ item }}</Option>
           </Select>
         </Col>
-        <Col span="2" style="text-align: right;margin-right: 15px; margin-left: 15px"><span>水质指标</span></Col>
+        <Col span="2" style="text-align: right;margin-right: 15px; margin-left: 15px"><span>Water Quality Index</span></Col>
         <Col span="2" style="text-align: left">
-          <Select v-model="indicator" style="width: 100px" placeholder="酸碱度">
-            <Option value="ph">酸碱度</Option>
-            <Option value="do">溶解氧</Option>
-            <Option value="nh3N">氨氮</Option>
+          <Select v-model="indicator" style="width: 100px" placeholder="PH">
+            <Option value="ph">PH</Option>
+            <Option value="do">Dissolved Oxygen</Option>
+            <Option value="nh3N">Ammonia Nitrogen</Option>
           </Select>
         </Col>
-        <Col span="2" style="text-align: right;margin-right: 15px;margin-left: 15px"><span>时间周期</span></Col>
+        <Col span="2" style="text-align: right;margin-right: 15px;margin-left: 15px"><span>Time</span></Col>
         <Col span="2" style="text-align: left">
-          <Select v-model="period" style="width: 100px" placeholder="近一年">
-            <Option value="1">近一年</Option>
-            <Option value="3">近三年</Option>
-            <Option value="5">近五年</Option>
+          <Select v-model="period" style="width: 100px" placeholder="One Year">
+            <Option value="1">Last Year</Option>
+            <Option value="3">Last 3 Years</Option>
+            <Option value="5">Last 5 Years</Option>
           </Select>
         </Col>
         <Col span="3" offset="2">
-          <Button type="success" shape="circle" icon="ios-stats" long @click="getQueriedDataForPlot">显示趋势</Button>
+          <Button type="success" shape="circle" icon="ios-stats" long @click="getQueriedDataForPlot">Show Trend</Button>
         </Col>
       </Row>
     </div>
     <div id="plot_holder" v-if="plot_loading_flag" style="height: 600px">
-      <spin size="large" fix v-if="plot_loading_flag" style="font-size: 20px">加载中...</spin>
+      <spin size="large" fix v-if="plot_loading_flag" style="font-size: 20px">Loading...</spin>
     </div>
     <div id="plot" style="height: 600px"></div>
   </div>

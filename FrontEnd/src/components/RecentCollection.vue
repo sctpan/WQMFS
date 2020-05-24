@@ -1,19 +1,19 @@
 <template>
   <div class="content">
     <div class="title">
-      <span>近日监测情况</span>
+      <span>Recent Data</span>
     </div>
     <div class="data_table">
       <Table border  :loading="loading_flag"  :columns="columns" :data="waterQualities">
       </Table>
     </div>
     <div class="add">
-      <Button type="success" shape="circle" size="large" @click="showModal">手动添加数据</Button>
+      <Button type="success" shape="circle" size="large" @click="showModal">Add Data</Button>
     </div>
-    <Modal v-model="modal_flag" title="添加水质数据" cancel-text="取消" ok-text="提交" @on-ok="addWaterQuality" >
+    <Modal v-model="modal_flag" title="Add Water Quality Data" cancel-text="Cancel" ok-text="Submit" @on-ok="addWaterQuality" >
       <Row class="editLine_time">
         <Col span="4" offset="5" style="text-align: center">
-          <span>监测日期</span>
+          <span>Date</span>
         </Col>
         <Col>
           <DatePicker type="date"  :startDate="toBeAddedWaterQuality.date" @on-change="changeDate"></DatePicker>
@@ -21,13 +21,13 @@
       </Row>
       <Row class="editLine">
         <Col span="4" offset="1" style="text-align: center">
-          <span>酸碱度</span>
+          <span>PH</span>
         </Col>
         <Col span="6">
           <Input v-model="toBeAddedWaterQuality.ph"></Input>
         </Col>
         <Col span="4" offset="1" style="text-align: center">
-          <span>溶解氧</span>
+          <span>DO</span>
         </Col>
         <Col span="6" >
           <Input v-model="toBeAddedWaterQuality.do"></Input>
@@ -35,13 +35,13 @@
       </Row>
       <Row class="editLine">
         <Col span="4" offset="1" style="text-align: center">
-          <span>氨氮</span>
+          <span>NH<sub>3</sub>N</span>
         </Col>
         <Col span="6">
           <Input v-model="toBeAddedWaterQuality.nh3N"></Input>
         </Col>
         <Col span="4" offset="1" style="text-align: center">
-          <span>监测站</span>
+          <span>Station</span>
         </Col>
         <Col span="6">
           <Select v-model="toBeAddedWaterQuality.station">
@@ -71,13 +71,13 @@
             },
             columns: [
               {
-                title: '酸碱度（PH）',
+                title: 'PH',
                 key: 'ph',
                 align: 'center',
                 // width: 160
               },
               {
-                title: '溶解氧（DO mg/L）',
+                title: 'DO mg/L',
                 key: 'do',
                 align: 'center',
                 // width: 160
@@ -86,10 +86,9 @@
                 key: 'nh3N',
                 renderHeader:(h,params)=>{
                   return h('div',[
-                    h('span', '氨氮（'),
                     h('span', 'NH'),
                     h('sub','3'),
-                    h('span','N mg/L）')
+                    h('span','N mg/L')
                   ]);
                 },
                 align: 'center',
@@ -97,13 +96,13 @@
               },
 
               {
-                title: '监测日期',
+                title: 'Date',
                 key: 'date',
                 //width: 220,
                 align: 'center'
               },
               {
-                title: '监测站编号',
+                title: 'Station',
                 key: 'station',
                 width: 100,
                 align: 'center',
@@ -154,11 +153,11 @@
             }))
               .then(function(response) {
                 if(response.data.status == "success") {
-                  _this.$Message.success("添加成功");
+                  _this.$Message.success("Add succeed!");
                 } else if(response.data.status == "deny"){
-                    _this.$Message.error("权限不足，请联系管理员")
+                    _this.$Message.error("Permission denied, please contact the administrator")
                 } else {
-                    _this.$Message.error("添加失败");
+                    _this.$Message.error("Add failed");
                 }
                 _this.getRecentWaterQualities();
               })

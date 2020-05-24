@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -23,7 +24,7 @@ public class WaterQualityService {
     }
 
     public List<WaterQuality> findQueriedWaterQualities(String startDateStr, String endDateStr, Integer station) {
-        DateFormat df = DateFormat.getDateInstance();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate = null;
         Date endDate = null;
         try {
@@ -112,10 +113,21 @@ public class WaterQualityService {
         Map<String, Object> res = new HashMap<>();
         Pageable pageable = PageRequest.of(0, 5);
         List<String> dateStrs = waterQualityRepository.findLastDates(pageable);
+//        for(String dateStr : dateStrs) {
+//            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+//            try {
+//                System.out.println("parsed date: " + dateFormat.parse(dateStr));
+//            } catch (ParseException e){
+//                e.printStackTrace();
+//            }
+//
+//        }
         List<Float> forPlot = new ArrayList<>();
         List<Float> forPrediction = new ArrayList<>();
         for(String dateStr : dateStrs) {
             List<WaterQuality> waterQualitiesByDate = getWaterQaulitiesBySpecificDate(dateStr);
+            //System.out.println("size: " + waterQualitiesByDate.size());
             Float average = calAverage(indicator, waterQualitiesByDate);
             BigDecimal bigDecimal = new BigDecimal(average);
             forPlot.add(bigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue());
@@ -149,16 +161,21 @@ public class WaterQualityService {
     private List<WaterQuality> getWaterQaulitiesBySpecificDate(String dateStr) {
         String startDateStr = dateStr + " 00:00:00";
         String endDateStr = dateStr + " 23:59:59";
-        DateFormat dateFormat = DateFormat.getDateInstance();
+        System.out.println(startDateStr);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date startDate = null;
         Date endDate = null;
         try {
             startDate = dateFormat.parse(startDateStr);
+            System.out.println("startDate: " + startDate);
             endDate = dateFormat.parse(endDateStr);
+            System.out.println("endDate: " + endDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         List<WaterQuality> res = waterQualityRepository.findBySpecificDate(startDate, endDate);
+        System.out.println("specific dates size: " + res.size());
         return res;
     }
 

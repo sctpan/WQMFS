@@ -2,15 +2,15 @@
   <div class="content">
     <div class="query">
       <Row class="queryline">
-        <Col span="2" offset="1" style="text-align: center">水质指标</Col>
+        <Col span="2" offset="1" style="text-align: center">Water Quality Index</Col>
         <Col span="3" style="text-align: left">
           <Select v-model="indicator">
-            <Option value="ph">酸碱度</Option>
-            <Option value="do">溶解氧</Option>
-            <Option value="nh3N">氨氮</Option>
+            <Option value="ph">PH</Option>
+            <Option value="do">Dissolved Oxygen</Option>
+            <Option value="nh3N">Ammonia Nitrogen</Option>
           </Select>
         </Col>
-        <Col span="3" offset="1" style="text-align: center">机器学习模型</Col>
+        <Col span="3" offset="1" style="text-align: center">Machine Learning Model</Col>
         <Col span="3" style="text-align: left">
           <Select v-model="method">
             <Option value="LSTM">LSTM</Option>
@@ -18,16 +18,16 @@
             <Option value="RVM">RVM</Option>
             <Option value="Adaboost">Adaboost</Option>
             <Option value="BP">BP</Option>
-            <Option value="择优算法">择优算法</Option>
+            <Option value="Optimization">Optimization</Option>
           </Select>
         </Col>
         <Col span="3" offset="2">
-          <Button type="success" shape="circle" icon="ios-build" long @click="trainModel">训练模型</Button>
+          <Button type="success" shape="circle" icon="ios-build" long @click="trainModel">Train Model</Button>
         </Col>
       </Row>
     </div>
     <div id="plot_holder" v-if="plot_loading_flag" style="height: 600px">
-      <spin size="large" fix v-if="plot_loading_flag" style="font-size: 20px">{{method}}模型训练中，请稍等片刻...</spin>
+      <spin size="large" fix v-if="plot_loading_flag" style="font-size: 20px">Training {{method}} model...</spin>
     </div>
     <div id="plot" style="height: 600px"></div>
   </div>
@@ -73,12 +73,12 @@
                   charts.style.height = "600px";
                   _this.plot();
                 } else if(body.status === "deny") {
-                  _this.$Message.error("权限不足，请联系管理员");
+                  _this.$Message.error("\n" + "Permission denied, please contact the administrator");
                   charts.style.height = "600px";
                   charts.style.visibility = "visible"
                   _this.plot_loading_flag = false;
                 } else {
-                  _this.$Message.error("训练失败！");
+                  _this.$Message.error("Training failed！");
                   charts.style.height = "600px";
                   charts.style.visibility = "visible"
                   _this.plot_loading_flag = false;
@@ -104,11 +104,11 @@
             let option = {
               title: {
                 left: 'center',
-                text: '预测' + _this.indicator.toUpperCase() + '的' + _this.method + '模型训练结果',
-                subtext: '测试集上均方根误差为' + _this.rmse
+                text: 'Training Result of'  + ' ' + _this.method + ' Model on ' + _this.indicator.toUpperCase(),
+                subtext: 'The RMSE on test set is ' + _this.rmse
               },
               legend: {
-                data:['预测值','实际值']
+                data:['Predication','Actual value']
               },
               tooltip: {
                 trigger: "item"

@@ -124,7 +124,8 @@ public class ModelService {
         List<Float> forPrediction = (List<Float>) map.get("forPrediction");
         List<String> dates = (List<String>) map.get("dates");
         String startDate = dates.get(2);
-        DateFormat dateFormat = DateFormat.getDateInstance();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date date = null;
         try {
             date = dateFormat.parse(startDate);

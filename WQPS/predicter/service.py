@@ -9,7 +9,7 @@ def train_model(model_id, loop=3):
     model_info = model_handler.get_model_info(model_id)
     obj = model_info["obj"]
     method = model_info["method"]
-    if method == "择优算法":
+    if method == "Optimization":
        return train_vote_model(model_id, model_info)
     lstm_mode = False
     if method == "LSTM":
@@ -53,7 +53,7 @@ def predict_next_month(model_id, data):
     mean_and_std = data_processor.get_mean_and_std(raw_data, obj)
     x = data_processor.standardize_for_prediction(mean_and_std, np.array(data))
     # x = data_processor.build_x(data, obj)
-    if method == "择优算法":
+    if method == "Optimization":
         svm_model, rvm_model, bp_model, adaboost_model = model_handler.load_vote_model(model_info, model_id)
         pred = model_predicter.vote_predict(svm_model, rvm_model, bp_model, adaboost_model, x, mean_and_std)[0]
         return {'pred': pred}

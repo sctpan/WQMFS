@@ -2,18 +2,18 @@
   <div class="content">
     <div class="query">
       <Row class="queryline">
-        <Col span="2" offset="1" style="text-align: center">水质指标</Col>
+        <Col span="2" offset="1" style="text-align: center">Water Quality Index</Col>
         <Col span="3" style="text-align: left">
           <Select v-model="indicator" @on-change="getAllMethods" >
-            <Option value="ph">酸碱度</Option>
-            <Option value="do">溶解氧</Option>
-            <Option value="nh3N">氨氮</Option>
+            <Option value="ph">PH</Option>
+            <Option value="do">Dissolved Oxygen</Option>
+            <Option value="nh3N">Ammonia Nitrogen</Option>
           </Select>
         </Col>
-        <Col span="3" offset="1" style="text-align: center">机器学习模型</Col>
+        <Col span="3" offset="1" style="text-align: center">Machine Learning Model</Col>
         <Col span="3" style="text-align: left">
           <Select v-model="method" @on-change="getAvailableMethods">
-            <Option value="all">全部</Option>
+            <Option value="all">All</Option>
             <Option v-for="item in modelList" :value="item" :key="item">{{ item }}</Option>
           </Select>
         </Col>
@@ -23,16 +23,16 @@
       </Row>
     </div>
     <div class="data_table">
-      <div class="table_title">可用模型列表</div>
+      <div class="table_title">Available Models</div>
       <Table class="table" :loading="model_table_flag" border :columns="columns" :data="availableModels">
         <template slot-scope="{ row, index }" slot="action">
-          <Button type="success" size="default" @click="getNextMonthPrediction(index)">预测</Button>
-          <Button type="error" size="default" @click="deleteModel(index)">删除</Button>
+          <Button type="success" size="default" @click="getNextMonthPrediction(index)">Predict</Button>
+          <Button type="error" size="default" @click="deleteModel(index)">Delete</Button>
         </template>
       </Table>
     </div>
     <div id="plot_holder" v-if="plot_loading_flag" style="height: 400px">
-      <spin size="large" fix v-if="plot_loading_flag" style="font-size: 20px">使用{{chosenModel.method}}预测{{indicator.toUpperCase()}}中...</spin>
+      <spin size="large" fix v-if="plot_loading_flag" style="font-size: 20px">Using {{chosenModel.method}} to {{indicator.toUpperCase()}} predict...</spin>
     </div>
     <div id="plot" style="height: 400px"></div>
 
@@ -57,29 +57,29 @@
             plotWaterQualitiesSecond: [],
             columns: [
               {
-                title: '模型类型',
+                title: 'Type',
                 key: 'method',
                 align: 'center',
               },
               {
-                title: '均方根误差',
+                title: 'RMSE',
                 key: 'rmse',
                 align: 'center',
                 sortable: 'true'
               },
               {
-                title: '训练者',
+                title: 'Trainer',
                 key: 'user',
                 align: 'center',
               },
               {
-                title: '训练日期',
+                title: 'Training Date',
                 key: 'date',
                 align: 'center',
                 sortable: 'true'
               },
               {
-                title: '操作',
+                title: 'Operation',
                 slot: 'action',
                 align: 'center',
               }
@@ -136,12 +136,12 @@
             this.axios.post("model/delete/" + this.chosenModel.id.toString())
               .then(function (response) {
                 if(response.data.status === "success") {
-                  _this.$Message.success("删除成功");
+                  _this.$Message.success("Delete succeed!");
                   _this.getAvailableMethods();
                 } else if(response.data.status === "deny"){
-                  _this.$Message.error("权限不足，请联系管理员");
+                  _this.$Message.error("Permission denied, please contact the administrator!");
                 } else {
-                  _this.$Message.error("删除失败");
+                  _this.$Message.error("Delete failed!");
 
                 }
               })
@@ -174,7 +174,7 @@
                   charts.style.visibility = "visible"
                   charts.style.height = "400px";
                   _this.plot_loading_flag = false;
-                  _this.$Message.error("预测失败！")
+                  _this.$Message.error("Predict failed！")
                 }
               })
           },
@@ -184,9 +184,9 @@
             let option = {
               title: {
                 left: 'center',
-                text: _this.indicator.toUpperCase() + '下月预测值: ' + _this.prediction,
-                subtext: '由管理员' + _this.chosenModel.user + "在" + _this.chosenModel.date +
-                  '训练的' + _this.chosenModel.method + '模型预测'
+                text: _this.indicator.toUpperCase() + 'Predication for Next Month: ' + _this.prediction,
+                subtext: 'Predicted by ' + _this.chosenModel.method + ' model ' + 'which is trained by ' + _this.chosenModel.user + " on " + _this.chosenModel.date
+
               },
               tooltip: {
                 trigger: "item"

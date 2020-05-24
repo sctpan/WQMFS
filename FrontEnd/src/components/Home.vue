@@ -3,7 +3,7 @@
     <Layout :style="{minHeight: '100vh'}">
         <Header class="title" style="z-index: 999">
           <Row>
-            <Col span="8" style="text-align: left; line-height: 54px">水质管理与预测系统</Col>
+            <Col span="8" style="text-align: left; line-height: 54px">Water Quality Management and Forecasting System</Col>
             <Col span="4" offset="12" style="line-height: 54px">
               <Dropdown @on-click="dropDownClicked">
                 <span href="javascript:void(0)">
@@ -11,9 +11,9 @@
                   <Icon type="ios-arrow-down"></Icon>
                 </span>
                 <DropdownMenu slot="list">
-                  <DropdownItem name="info">用户信息</DropdownItem>
-                  <DropdownItem name="editPassword">修改密码</DropdownItem>
-                  <DropdownItem name="logout">注销</DropdownItem>
+                  <DropdownItem name="info">User Info</DropdownItem>
+                  <DropdownItem name="editPassword">Update Password</DropdownItem>
+                  <DropdownItem name="logout">Log Out</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </Col>
@@ -25,28 +25,28 @@
             <Submenu name="1">
               <template slot="title">
                 <Icon type="ios-archive" />
-                水质数据管理
+                Management
               </template>
-              <MenuItem name="/recent" to="/recent">近日监测</MenuItem>
-              <MenuItem name="/manage" to="/manage">历史数据</MenuItem>
-              <MenuItem name="/trend" to="trend">数据趋势</MenuItem>
+              <MenuItem name="/recent" to="/recent">Recent Data</MenuItem>
+              <MenuItem name="/manage" to="/manage">History Data</MenuItem>
+              <MenuItem name="/trend" to="trend">Data Trend</MenuItem>
             </Submenu>
 
             <Submenu name="2">
               <template slot="title">
                 <Icon type="md-trending-up" />
-                水质数据预测
+                Forecasting
               </template>
-              <MenuItem name="/predict" to="predict">下月预测</MenuItem>
-              <MenuItem name="/train" to="train">模型训练</MenuItem>
+              <MenuItem name="/predict" to="predict">Make Prediction</MenuItem>
+              <MenuItem name="/train" to="train">Train Models</MenuItem>
             </Submenu>
 
             <Submenu name="3" style="display: none" id="user_menu">
               <template slot="title">
                 <Icon type="ios-contact" />
-                系统用户管理
+                Administration
               </template>
-              <MenuItem name="/user" to="user">用户管理</MenuItem>
+              <MenuItem name="/user" to="user">User Management</MenuItem>
             </Submenu>
           </Menu>
         </Sider>
@@ -55,15 +55,15 @@
             <router-view></router-view>
           </Content>
           <Footer class="footer">
-            &copy; 南京邮电大学计算机学院、软件学院、网络空间安全学院
+            &copy; Yifan Pan &nbsp &nbspNanjing University of Posts and Telecommunications
           </Footer>
         </Layout>
       </Layout>
     </Layout>
-    <Modal v-model="info_modal_flag" title="用户信息" cancel-text="">
+    <Modal v-model="info_modal_flag" title="User Info" cancel-text="">
       <Row class="editLine">
         <Col span="4" offset="3" style="text-align: left">
-          <span>用户名</span>
+          <span>Username</span>
         </Col>
         <Col span="6" offset="1">
           <span>{{currentUser.username}}</span>
@@ -71,7 +71,7 @@
       </Row>
       <Row class="editLine">
         <Col span="4" offset="3" style="text-align: left">
-          <span>用户角色</span>
+          <span>Role</span>
         </Col>
         <Col span="6" offset="1">
           <span>{{currentUser.role}}</span>
@@ -79,33 +79,33 @@
       </Row>
       <Row class="editLine">
         <Col span="4" offset="3" style="text-align: left">
-          <span>用户权限</span>
+          <span>Authority</span>
         </Col>
         <Col span="12" offset="1">
           <span>{{currentUser.authority}}</span>
         </Col>
       </Row>
     </Modal>
-    <Modal v-model="pwd_modal_flag" title="修改密码" cancel-text="取消" ok-text="提交" @on-ok="editPassword" >
+    <Modal v-model="pwd_modal_flag" title="Update Password" cancel-text="Cancel" ok-text="Submit" @on-ok="editPassword" >
       <Row class="editLine">
-        <Col span="4" offset="3">
-          <span>原密码</span>
+        <Col span="6" offset="3">
+          <span>Password</span>
         </Col>
         <Col span="8" offset="1">
           <Input size="small" type="password" v-model="password.originPassword"></Input>
         </Col>
       </Row>
       <Row class="editLine">
-        <Col span="4" offset="3">
-          <span>新密码</span>
+        <Col span="6" offset="3">
+          <span>New Password</span>
         </Col>
         <Col span="8" offset="1">
           <Input size="small" type="password" v-model="password.newPassword"></Input>
         </Col>
       </Row>
       <Row class="editLine">
-        <Col span="4" offset="3">
-          <span>确认密码</span>
+        <Col span="6" offset="3">
+          <span>Confirm Password</span>
         </Col>
         <Col span="8" offset="1">
           <Input size="small" type="password" v-model="password.confirmPassword"></Input>
@@ -150,16 +150,16 @@
                 } else {
                   _this.currentUser = response.data;
                   if(_this.currentUser.role.id === 1) {
-                    _this.currentUser.role = "超级管理员";
-                    _this.currentUser.authority = "全部权限"
+                    _this.currentUser.role = "Super Admin";
+                    _this.currentUser.authority = "All Authorities"
                     let user_menu = document.getElementById("user_menu");
                     user_menu.style.display = "block";
                   } else if(_this.currentUser.role.id === 2) {
-                    _this.currentUser.role = "管理员";
-                    _this.currentUser.authority = "水质数据查询、增加、修改、删除、预测; 模型训练"
+                    _this.currentUser.role = "Admin";
+                    _this.currentUser.authority = "query, create, modify, delete water quality data; make predictions; train models"
                   } else {
-                    _this.currentUser.role = "普通用户";
-                    _this.currentUser.authority = "水质数据查询、预测"
+                    _this.currentUser.role = "User";
+                    _this.currentUser.authority = "query water quality data; make predictions"
                   }
                 }
             })
@@ -180,7 +180,7 @@
                 if(response.data.status === "success") {
                   _this.$router.replace({path: '/'});
                 } else {
-                  _this.$Message.error("注销失败!")
+                  _this.$Message.error("Log out failed!")
                 }
               })
           },
@@ -194,11 +194,11 @@
               }))
                 .then(function(response) {
                   if(response.data.status === "success") {
-                    _this.$Message.success("密码修改成功");
+                    _this.$Message.success("Update password successfully!");
                   } else if(response.data.status === "error") {
-                    _this.$Message.error("原密码错误");
+                    _this.$Message.error("Wrong password!");
                   } else {
-                    _this.$Message.error("密码修改失败");
+                    _this.$Message.error("Update password failed!");
                   }
                 })
             }
@@ -210,10 +210,10 @@
           checkPassword() {
             if(this.password.originPassword === '' || this.password.newPassword === ''
               || this.password.confirmPassword === '') {
-              this.$Message.error("输入不得为空");
+              this.$Message.error("Input is empty!");
               return false;
             } else if(this.password.newPassword !== this.password.confirmPassword) {
-              this.$Message.error("新密码不一致");
+              this.$Message.error("New password is inconsistent!");
               return false;
             }
             return true;
@@ -240,11 +240,18 @@
   }
 
   .editLine {
-    font-size: 16px;
+    font-size: 12px;
     line-height: 24px;
     margin-top: 10px;
     margin-bottom: 10px;
   }
 
+
+  .footer {
+    font-size: 16px;
+    margin-top: 100px;
+    text-align: center;
+    color: gray;
+  }
 
 </style>

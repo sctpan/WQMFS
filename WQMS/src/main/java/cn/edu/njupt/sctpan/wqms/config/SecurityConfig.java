@@ -59,9 +59,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         });
     }
 
-    private PrintWriter setCorsAndGetWriter(HttpServletResponse httpServletResponse) throws IOException, ServletException{
+    private PrintWriter setCorsAndGetWriter(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException, ServletException{
         httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
-        httpServletResponse.setHeader("Access-Control-Allow-Origin", "http://localhost:8081");
+        httpServletResponse.setHeader("Access-Control-Allow-Origin", httpServletRequest.getHeader("Origin"));
         httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
         httpServletResponse.setHeader("Access-Control-Allow-Headers", "*");
         httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
@@ -93,7 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                                         Authentication authentication) throws IOException, ServletException {
 //                        SecurityContextHolder.getContext().setAuthentication(authentication);
 //                        httpServletRequest.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
-                        PrintWriter out = setCorsAndGetWriter(httpServletResponse);
+                        PrintWriter out = setCorsAndGetWriter(httpServletRequest, httpServletResponse);
                         out.write("{\"status\":\"success\"}");
                         out.flush();
                         out.close();
@@ -104,7 +104,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     public void onAuthenticationFailure(HttpServletRequest httpServletRequest,
                                                         HttpServletResponse httpServletResponse, AuthenticationException e)
                                                         throws IOException, ServletException {
-                        PrintWriter out = setCorsAndGetWriter(httpServletResponse);
+                        PrintWriter out = setCorsAndGetWriter(httpServletRequest, httpServletResponse);
                         out.write("{\"status\":\"failure\"}");
                         out.flush();
                         out.close();
@@ -118,7 +118,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler(new LogoutSuccessHandler() {
                     @Override
                     public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-                        PrintWriter out = setCorsAndGetWriter(httpServletResponse);
+                        PrintWriter out = setCorsAndGetWriter(httpServletRequest, httpServletResponse);
                         out.write("{\"status\":\"success\"}");
                         out.flush();
                         out.close();
@@ -128,7 +128,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().csrf().disable().exceptionHandling().accessDeniedHandler(new AccessDeniedHandler() {
                 @Override
                 public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException, ServletException {
-                    PrintWriter out = setCorsAndGetWriter(httpServletResponse);
+                    PrintWriter out = setCorsAndGetWriter(httpServletRequest, httpServletResponse);
                     out.write("{\"status\":\"deny\"}");
                     out.flush();
                     out.close();

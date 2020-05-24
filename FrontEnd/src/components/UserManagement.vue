@@ -2,21 +2,21 @@
   <div class="content">
     <Row class="search">
       <Col span="6" offset="9">
-        <Input search enter-button placeholder="搜索用户名" v-model="searchUsername" @on-search="getQueriedUsers"/>
+        <Input search enter-button placeholder="Search User" v-model="searchUsername" @on-search="getQueriedUsers"/>
       </Col>
     </Row>
     <div class="data_table">
       <Table class="table" border  :loading="loading_flag" :columns="columns" :data="allUsers">
         <template slot-scope="{ row, index }" slot="action">
-          <Button type="info" size="default" style="margin-right: 10px" @click="show(index)">授权</Button>
-          <Button type="error" size="default" @click="remove(index)">删除</Button>
+          <Button type="info" size="default" style="margin-right: 10px" @click="show(index)">Authorize</Button>
+          <Button type="error" size="default" @click="remove(index)">Delete</Button>
         </template>
       </Table>
     </div>
-    <Modal v-model="modal_flag" title="用户授权" cancel-text="取消" ok-text="提交" @on-ok="grantAuthority" >
+    <Modal v-model="modal_flag" title="Authorization" cancel-text="Cancel" ok-text="submit" @on-ok="grantAuthority" >
       <Row class="editLine">
         <Col span="4" offset="6" style="text-align: center">
-          <span>用户名</span>
+          <span>Username</span>
         </Col>
         <Col span="6" offset="1">
           <span>{{chosenUser.username}}</span>
@@ -24,7 +24,7 @@
       </Row>
       <Row class="editLine">
         <Col span="4" offset="6" style="text-align: center">
-          <span>当前权限</span>
+          <span>Role</span>
         </Col>
         <Col span="6" offset="1">
           <span>{{chosenUser.role}}</span>
@@ -32,12 +32,12 @@
       </Row>
       <Row class="editLine">
         <Col span="4" offset="6" style="text-align: center">
-          <span>授予权限</span>
+          <span>Authorization</span>
         </Col>
         <Col span="6" offset="1">
           <Select size="small" v-model="roleName">
-            <Option value="vip" >管理员</Option>
-            <Option value="user">普通用户</Option>
+            <Option value="vip" >Administrator</Option>
+            <Option value="user">User</Option>
           </Select>
         </Col>
       </Row>
@@ -58,40 +58,40 @@
             searchUsername: "",
             columns: [
               {
-                title: '用户ID',
+                title: 'ID',
                 key: 'id',
                 align: 'center'
               },
               {
-                title: '用户名',
+                title: 'Username',
                 key: 'username',
                 align: 'center',
               },
               {
-                title: '用户角色',
+                title: 'Role',
                 key: 'role',
                 align: 'center',
                 filters: [
                   {
-                    label: '管理员',
+                    label: 'Admin',
                     value: 1
                   },
                   {
-                    label: '普通用户',
+                    label: 'User',
                     value: 2
                   }
                 ],
                 filterMultiple: false,
                 filterMethod (value, row) {
                   if (value === 1) {
-                    return row.role === "管理员";
+                    return row.role === "Admin";
                   } else if (value === 2) {
-                    return row.role === "普通用户";
+                    return row.role === "User";
                   }
                 }
               },
               {
-                title: '操作',
+                title: 'Operation',
                 slot: 'action',
                 align: 'center',
               }
@@ -110,11 +110,11 @@
                 _this.allUsers = response.data;
                 for(var i=0; i<_this.allUsers.length; i++) {
                   if(_this.allUsers[i].role.id === 1) {
-                    _this.allUsers[i].role = "超级管理员";
+                    _this.allUsers[i].role = "Super Admin";
                   } else if(_this.allUsers[i].role.id === 2) {
-                    _this.allUsers[i].role = "管理员";
+                    _this.allUsers[i].role = "Admin";
                   } else {
-                    _this.allUsers[i].role = "普通用户";
+                    _this.allUsers[i].role = "User";
                   }
                 }
                 _this.loading_flag = false;
@@ -123,8 +123,8 @@
 
           show(index) {
             this.chosenUser = this.allUsers[index];
-            if(this.chosenUser.role === "超级管理员") {
-                this.$Message.error("无法对超级管理员进行授权")
+            if(this.chosenUser.role === "Super Admin") {
+                this.$Message.error("Unable to authorize the super administrator")
             } else {
                 this.modal_flag = true;
             }
@@ -133,18 +133,18 @@
           remove(index) {
             let _this = this;
             this.chosenUser = this.allUsers[index];
-            if(this.chosenUser.role === "超级管理员") {
-              this.$Message.error("无法删除超级管理员")
+            if(this.chosenUser.role === "Super Admin") {
+              this.$Message.error("Unable to delete the super administrator")
             } else {
               _this.axios.post("/user/delete/" + _this.chosenUser.id)
                 .then(function(response) {
                   if(response.data.status === "success") {
-                    _this.$Message.success("删除成功");
+                    _this.$Message.success("Delete succeed!");
                     _this.getQueriedUsers();
                   } else if(response.data.status === "deny") {
-                    _this.$Message.error("权限不足，请联系管理员");
+                    _this.$Message.error("Permission denied, please contact the administrator");
                   } else {
-                    _this.$Message.error("删除失败");
+                    _this.$Message.error("Delete failed!");
                   }
                 })
             }
@@ -157,12 +157,12 @@
             }))
               .then(function (response) {
                 if(response.data.status === "success") {
-                  _this.$Message.success("授权成功");
+                  _this.$Message.success("Authorize succeed!");
                   _this.getQueriedUsers();
                 } else if(response.data.status === "deny") {
-                  _this.$Message.error("权限不足，请联系管理员");
+                  _this.$Message.error("Permission denied, please contact the administrator!");
                 } else {
-                  _this.$Message.error("授权失败");
+                  _this.$Message.error("Delete failed!");
                 }
               })
           },
@@ -182,11 +182,11 @@
                   _this.allUsers = response.data;
                   for(var i=0; i<_this.allUsers.length; i++) {
                     if(_this.allUsers[i].role.id === 1) {
-                      _this.allUsers[i].role = "超级管理员";
+                      _this.allUsers[i].role = "Super Admin";
                     } else if(_this.allUsers[i].role.id === 2) {
-                      _this.allUsers[i].role = "管理员";
+                      _this.allUsers[i].role = "Admin";
                     } else {
-                      _this.allUsers[i].role = "普通用户";
+                      _this.allUsers[i].role = "User";
                     }
                   }
                   _this.loading_flag = false;

@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -67,10 +68,10 @@ public class WaterQualityRepositoryTest {
 
     @Test
     public void findBySpecificDate() {
-        String dateStr = "2006-12-01";
-        String startDateStr = dateStr + " 00:00:00";
-        String endDateStr = dateStr + " 23:59:59";
-        DateFormat dateFormat = DateFormat.getDateInstance();
+        String dateStr = "2006-11-01";
+        String startDateStr = "2006-11-01" + " 00:00:00";
+        String endDateStr = "2006-12-01" + " 23:59:59";
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate = null;
         Date endDate = null;
         try {
@@ -83,7 +84,7 @@ public class WaterQualityRepositoryTest {
         System.out.println(endDateStr);
         List<WaterQuality> res = waterQualityRepository.findBySpecificDate(startDate, endDate);
         for (WaterQuality waterQuality : res) {
-            System.out.println(waterQuality);
+            System.out.println("water quality: " + waterQuality);
         }
     }
 }
