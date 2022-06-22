@@ -22,7 +22,7 @@ matplotlib==3.0.3
 mock==2.0.0
 mysqlclient==1.4.2.post1
 ndg-httpsclient==0.5.1
-numpy==1.16.2
+numpy==1.22.0
 pandas==0.24.2
 parso==0.3.4
 pbr==5.1.3
